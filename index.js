@@ -13,6 +13,7 @@ const menuDesplegableMobile = document.querySelector(
   "#menu-desplegable-mobile"
 );
 const botonHamburguesa = document.getElementById("boton-hamburguesa");
+// Nunca usan estos elementos
 const linkBalanceMobile = document.querySelector(".link-balance-mobile");
 const linkCategoriasMobile = document.querySelector(".link-categorias-mobile");
 const linkReportesMobile = document.querySelector(".link-reportes-mobile");
@@ -49,6 +50,7 @@ const contenedorCategoriaAgregada = document.getElementById(
 const seccionEditarCategorias = document.getElementById(
   "seccion-editar-categorias"
 );
+// Está repetido este selector, en la linea 64. 
 const botonEditarCategoria = document.querySelector(
   "#boton-editar-categoria-formulario"
 );
@@ -72,6 +74,7 @@ const seccionSinOperaciones = document.getElementById(
 const seccionConOperaciones = document.getElementById(
   "contenedor-titulos-nuevas-operaciones"
 );
+// Esta repetido este  selector en la linea 88
 const contenedorNuevasOperaciones = document.getElementById(
   "contenedor-listado-nuevas-operaciones"
 );
@@ -85,9 +88,11 @@ const botonAgregarNuevaOperacion = document.getElementById(
 const contenedorListadoNuevasOperaciones = document.getElementById(
   "contenedor-listado-nuevas-operaciones"
 );
+// Está repetido este selector, en la linea 72
 const contenedorSinOperaciones = document.getElementById(
   "contenedor-sin-operaciones"
 );
+// Nunca usan este selector
 const itemNuevaOperacion = document.getElementById("item-nueva-operacion");
 
 const inputDescripcionNuevaOperacion = document.getElementById(
@@ -175,6 +180,7 @@ const arraySecciones = [
   formularioEditarOperacion,
 ];
 
+// AMO ESTA FUNCION!!!
 const mostrarSeccion = (array, seccion) => {
   for (let i = 0; i < array.length; i++) {
     if (array[i] != seccion) {
@@ -275,6 +281,7 @@ const agregarItemCategoria = (array) => {
   const itemAgregadoEnCategorias = array.reduce((acc, elemento, index) => {
     return (
       acc +
+      // Ojo, acá olvidaron las comillas en el id. No pasa nada pero puede fallar en navegadores viejitos
       `<div class="columns is-mobile" id=categoria-agregada>
     <div class="column">
     <p class="tag is-primary is-light">${elemento}</p>
@@ -296,11 +303,14 @@ formAgregarCategoria.onsubmit = (event) => {
   event.preventDefault();
 };
 
+// El botón envía el form, así que podrian desechar la funcion onclick del boton y poner
+// toda esta logica en el submit del form. 
 botonAgregarCategoria.onclick = () => {
   const categoriaCapitalizada = capitalizar(inputAgregarCategoria.value);
   const arrayDesdeLS = traerCategoriasDesdeLS("categorias");
 
   if (arrayDesdeLS.includes(categoriaCapitalizada)) {
+    // Me gusta que hayan agregado validaciones a lo largo de todo su TP :) 
     alert("¡Categoria ya existente!");
   } else if (categoriaCapitalizada === "") {
     alert("¡Categoria sin nombre!");
@@ -308,6 +318,7 @@ botonAgregarCategoria.onclick = () => {
     arrayDesdeLS.push(categoriaCapitalizada);
     guardarCategoriasLocalStorage(arrayDesdeLS, "categorias");
     agregarCategoriaHTML(traerCategoriasDesdeLS("categorias"), selectCategoria);
+    
     agregarCategoriaHTML(
       traerCategoriasDesdeLS("categorias"),
       selectCategoriaNuevaOperacion
@@ -351,6 +362,9 @@ const mostrarCategoriaAEditar = () => {
         const categoriasLS = traerCategoriasDesdeLS("categorias");
         categoriasLS.push(categoriaAEditar);
         guardarCategoriasLocalStorage(categoriasLS, "categorias");
+
+        // Esta estructura se repite varias veces a lo largo de su código: 
+        // podrían ponerla dentro de otra función auxiliar
         agregarCategoriaHTML(
           traerCategoriasDesdeLS("categorias"),
           selectCategoria
@@ -391,10 +405,34 @@ botonEditarCategoriaFormulario.onclick = () => {
 };
 
 //AGREGAR CATEGORIA EN EL SELECT
+// El nombre de esta función es confuso. Si lo que hace es agregar categorías a los select, 
+// debería llamarse agregarCategoriaASelectHTML o algo así
 const agregarCategoriaHTML = (categorias, select) => {
+
+  // Esta función está algo repetitiva. 
+  // La podríamos hacer más breve haciendo que el valor de la acc sea condicional. 
+  // Así no necesitan el if else. 
+
+  // let acumuladora = ""
+  // if (select === selectCategoria) {
+  //   acc = "<option value="Todos">Todas</option>"
+  // }
+
+  // const categoriasEnHTML = categorias.reduce(
+  //   (acc, categoria, index) => {
+  //     return (
+  //       acc +
+  //       `<option value="${categoria}" id="categoria-${index}">${categoria}</option>`
+  //     );
+  //   },
+  //   acumuladora
+  // );
+  // select.innerHTML = categoriasEnHTML;
+
   if (select === selectCategoria) {
     const opcionTodos = `<option value="Todos">Todas</option>`;
     const categoriasEnHTML = categorias.reduce(
+      // No necesitan definir el cuarto parametro aca
       (acc, categoria, index, array) => {
         return (
           acc +
@@ -406,6 +444,7 @@ const agregarCategoriaHTML = (categorias, select) => {
     select.innerHTML = categoriasEnHTML;
   } else {
     const categoriasEnHTML = categorias.reduce(
+      // Ni acá
       (acc, categoria, index, array) => {
         return (
           acc +
@@ -426,14 +465,20 @@ const ejecutarBotonesEliminarCatagoria = () => {
 
   for (let i = 0; i < botonEliminarCategoria.length; i++) {
     botonEliminarCategoria[i].onclick = () => {
+      // ojo, acá declaran una variable sin haberle agregado const o let antes. 
+      // Si hacen eso, JS asume que es una variable de tipo var, que tiene scope global y puede 
+      // traer problemas. Agreguen let antes
       idCortado = botonEliminarCategoria[i].id.slice(25);
+      // No dejen console log en el codigo
       console.log(idCortado);
+      // Mismo problema acá
       idDelBoton = Number(idCortado);
       const categoriasNoEliminadas = traerCategoriasDesdeLS(
         "categorias"
       ).filter((elemento, index) => {
         return index !== idDelBoton;
       });
+      // no dejen console log
       console.log(categoriasNoEliminadas);
       guardarCategoriasLocalStorage(categoriasNoEliminadas, "categorias");
       traerCategoriasDesdeLS("categorias");
@@ -472,6 +517,9 @@ const traerOperacionesDesdeLS = (clave) => {
     return null;
   } else {
     return operacionesDesdeLS.map((operacion, index) => {
+      // Entiendo que aquí le agregan el indice a la operación para poder usarlo en 
+      // mostrarOperacionesEnHTML. Creo que sería más sencillo si en el reduce de mostrarOperacionesEnHTML 
+      // usan el indice del reduce, en lugar de agregarlo aquí.
       return { ...operacion, index };
     });
   }
@@ -538,6 +586,7 @@ seccionNuevaOperacion.onsubmit = (event) => {
   event.preventDefault();
 };
 botonAgregarNuevaOperacion.onclick = () => {
+  // este valor no cambia, así que debería ser const
   let operacion = {
     descripcion: inputDescripcionNuevaOperacion.value,
     categoria: selectCategoriaNuevaOperacion.value,
@@ -590,6 +639,7 @@ const editarOperacion = () => {
 
       botonFormularioEditarOperaciones.onclick = (event) => {
         event.preventDefault();
+        // No son necesarios ni los paréntesis ni las comas acá.
         (operacionAEditar.descripcion = inputDescripcionEditarOperacion.value),
           (operacionAEditar.categoria = selectCategoriaEditarOperacion.value),
           (operacionAEditar.fecha = inputFechaEditarOperacion.value),
@@ -619,6 +669,7 @@ const eliminarOperacion = (index) => {
   operaciones = traerOperacionesDesdeLS("operaciones").filter((elemento, i) => {
     return index !== i;
   });
+  // ಠ_ಠ 
   console.log(operaciones);
   console.log("eliminar", index);
   guardarOperacionesLocalStorage(operaciones, "operaciones");
@@ -634,6 +685,7 @@ const asignarFuncionEliminar = () => {
   for (let i = 0; i < botonEliminarOperacion.length; i++) {
     let id = botonEliminarOperacion[i].id.slice(32);
     let idOperacion = Number(id);
+    // ಠ_ಠ 
     console.log("asignar", idOperacion);
     botonEliminarOperacion[i].onclick = () => {
       eliminarOperacion(idOperacion);
@@ -659,6 +711,13 @@ const ordenarFechas = (array) => {
 };
 
 //funcion filtro fechas
+
+// Esta funcion podria ser mejor con un filter
+// const fechasNuevas = (operaciones) => {
+//   return operaciones.filter((operacion) => {
+//     return new Date(operacion.fecha) >= new Date(inputFecha.value)
+//   })
+// }
 const fechasNuevas = (operaciones) => {
   const fechasSeccionadas = [];
   for (let i = 0; i < operaciones.length; i++) {
@@ -691,6 +750,11 @@ const mostrarEnBalance = (operaciones) => {
 
   let resultado = sumaGanancias - sumaGastos;
 
+  
+  // El código acá está super bien, el problema es que si edito muchas operaciones
+  // me va a pasar que el numero del total se vea rojo aunque esté en positivo. 
+  // El problema es que le quedan agregadas a la vez las clases success y danger: 
+  // tendríamos que aquí, además de agregarle una clase, quitarle la otra
   if (resultado > 0) {
     numeroTotalBalance.classList.add("has-text-success");
     numeroTotalBalance.textContent = `+$${resultado}`;
@@ -748,6 +812,17 @@ selectCategoria.onchange = () => {
 };
 
 //POR FECHA
+
+// Las fechas no forman parte de la funcion aplicarFiltros, por lo que ocurre esta situacion:
+// 1. Voy a la seccion seccionPrincipal
+// 2. Elijo filtrar por tipo "gasto"
+// 3. Veo los gastos
+// 4. Elijo filtrar por las operaciones a partir del 1ro de noviembre 
+// 5. Veo a la vez gastos y ganancias, a pesar de que el filtro seleccionado es el de "gasto"
+// Todos los filtros se deben aplicar a la vez, eso incluye las fechas. 
+// La funcion fechasNuevas deberia ser parte de aplicarFiltros
+// En cambio acá estan filtrando por *todas* las fechas del LS sin fijarse si hay otro filtro seleccionado
+
 inputFecha.onchange = () => {
   const filtradoDeFechas = fechasNuevas(traerOperacionesDesdeLS("operaciones"));
   mostrarOperacionesEnHTML(ordenarFechas(filtradoDeFechas));
@@ -793,6 +868,10 @@ const ordenarPor = () => {
 /*/////////////////////////////////////////////////////////////////////////////////////////////////////////
                                            REPORTES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+
+// Impecable la seccion reportes 
+
 
 //Funcion Categoria con Mayor ganancia o gasto
 const mostrarMayorGananciaOGasto = (tipo) => {
