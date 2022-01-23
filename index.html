@@ -16,6 +16,8 @@
 <body>
   <header>
     <!--Logo y h1-->
+    <!-- Ojo, tienen el lenguaje del documento en español y los textos en español, 
+    pero este aria label está en inglés. El lector de pantalla va a leerlo en español   -->
     <nav class="navbar is-spaced is-primary" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a href="#principal" class="navbar-item">
@@ -82,6 +84,11 @@
 
           <form class="box">
             <div class="columns is-mobile mb-0">
+              <!-- Esto es un detalle, pero no entiendo por qué filtros es un h3 si Balances es un h2. 
+              Dan la impresión de estar en el mismo nivel de jerarquía. 
+              Si la idea es que queremos un h2 en Categoria y Reportes, pero no tenemos uno en
+              Balances, no hay problema! Puede ser que Balances no tenga un titulo general y todos
+              los titulos que aparecen aquí sean h3 -->
               <h3 class="column title is-size-3 has-text-weight-bold">
                 Filtros
               </h3>
@@ -196,6 +203,8 @@
               <div id="contenedor-listado-nuevas-operaciones">
               </div>
               </div>
+
+              <!-- Este div de cierre está de más -->
             </div>
 
           </article>
@@ -219,6 +228,8 @@
           <div class="field">
             <label for="monto-nueva-operacion" class="label">Monto</label>
             <div class="control">
+              <!-- ojo, acá se les escapó una tilde en operación. Eso hace que el label
+              no sepa que tiene que estar relacionado a este elemento. -->
               <input type="number" id="monto-nueva-operación" class="input" value="0">
             </div>
           </div>
@@ -250,6 +261,7 @@
           <div class="field">
             <label for="fecha-nueva-operacion" class="label">Fecha</label>
             <div class="control">
+              <!-- otra tilde acá. -->
               <input type="date" id="fecha-nueva-operación" class="input">
             </div>
           </div>
@@ -277,6 +289,7 @@
             <div class="field">
               <label for="monto-editar-operacion" class="label">Monto</label>
               <div class="control">
+                <!-- Otra tilde :D -->
                 <input type="number" id="monto-editar-operación" class="input" value="0">
               </div>
             </div>
@@ -306,6 +319,7 @@
             <div class="field">
               <label for="fecha-editar-operacion" class="label">Fecha</label>
               <div class="control">
+                <!-- Otra tilde :D -->
                 <input type="date" id="fecha-editar-operación" class="input">
               </div>
             </div>
@@ -335,6 +349,7 @@
           </div>
           <!--Categorias agregadas-->
           <div class="mt-5 mx-4" id="contenedor-categorias-agregadas">
+            <!-- No dejen código comentado en entregas -->
             <!-- <div class="columns is-mobile" id=categoria-agregada>
               <div class="column">
                 <p class="tag is-primary is-light">Comida</p>
@@ -347,6 +362,7 @@
           </div>
         </form>
       </div>
+      <!-- Este div de cierre está de más -->
       </div>
     </section>
     <!--Sección editar categorias-->
@@ -376,6 +392,7 @@
           <!--Reportes sin datos-->
           <div id="reportes-sin-datos" class="is-hidden">
             <figure class="image column is-6 is-offset-3 is-7-mobile is-offset-3-mobile">
+              <!-- Recuerden siempre agregar un alt a las imágenes para que el lector las describa -->
               <img src="img/reportes.svg"/>
             </figure>
             <h4 class="title is-4 mt-6 has-text-centered">
