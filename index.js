@@ -13,11 +13,6 @@ const menuDesplegableMobile = document.querySelector(
   "#menu-desplegable-mobile"
 );
 const botonHamburguesa = document.getElementById("boton-hamburguesa");
-// Nunca usan estos elementos
-const linkBalanceMobile = document.querySelector(".link-balance-mobile");
-const linkCategoriasMobile = document.querySelector(".link-categorias-mobile");
-const linkReportesMobile = document.querySelector(".link-reportes-mobile");
-
 const seccionNuevaOperacion = document.getElementById(
   "formulario-nueva-operacion"
 );
@@ -50,10 +45,7 @@ const contenedorCategoriaAgregada = document.getElementById(
 const seccionEditarCategorias = document.getElementById(
   "seccion-editar-categorias"
 );
-// Está repetido este selector, en la linea 64. 
-const botonEditarCategoria = document.querySelector(
-  "#boton-editar-categoria-formulario"
-);
+
 const botonCancelarEditarCategoria = document.querySelector(
   "#boton-cancelar-editar-categoria"
 );
@@ -74,7 +66,7 @@ const seccionSinOperaciones = document.getElementById(
 const seccionConOperaciones = document.getElementById(
   "contenedor-titulos-nuevas-operaciones"
 );
-// Esta repetido este  selector en la linea 88
+
 const contenedorNuevasOperaciones = document.getElementById(
   "contenedor-listado-nuevas-operaciones"
 );
@@ -85,21 +77,12 @@ const botonCancelarNuevasOperaciones = document.getElementById(
 const botonAgregarNuevaOperacion = document.getElementById(
   "boton-agregar-nuevas-operaciones"
 );
-const contenedorListadoNuevasOperaciones = document.getElementById(
-  "contenedor-listado-nuevas-operaciones"
-);
-// Está repetido este selector, en la linea 72
-const contenedorSinOperaciones = document.getElementById(
-  "contenedor-sin-operaciones"
-);
-// Nunca usan este selector
-const itemNuevaOperacion = document.getElementById("item-nueva-operacion");
 
 const inputDescripcionNuevaOperacion = document.getElementById(
-  "descripción-nueva-operación"
+  "descripción-nueva-operacion"
 );
 const inputMontoNuevaOperacion = document.getElementById(
-  "monto-nueva-operación"
+  "monto-nueva-operacion"
 );
 const selectTipoNuevaOperacion = document.getElementById(
   "tipo-nueva-operacion"
@@ -108,7 +91,7 @@ const selectCategoriaNuevaOperacion = document.getElementById(
   "categoria-nueva-operacion"
 );
 const inputFechaNuevaOperacion = document.getElementById(
-  "fecha-nueva-operación"
+  "fecha-nueva-operacion"
 );
 
 //EDITAR OPERACIONES
@@ -116,7 +99,7 @@ const formularioEditarOperacion = document.getElementById(
   "formulario-editar-operacion"
 );
 const inputDescripcionEditarOperacion = document.getElementById(
-  "descripción-editar-operación"
+  "descripcion-editar-operacion"
 );
 const inputMontoEditarOperacion = document.getElementById(
   "monto-editar-operación"
@@ -281,8 +264,7 @@ const agregarItemCategoria = (array) => {
   const itemAgregadoEnCategorias = array.reduce((acc, elemento, index) => {
     return (
       acc +
-      // Ojo, acá olvidaron las comillas en el id. No pasa nada pero puede fallar en navegadores viejitos
-      `<div class="columns is-mobile" id=categoria-agregada>
+      `<div class="columns is-mobile" id = "categoria-agregada">
     <div class="column">
     <p class="tag is-primary is-light">${elemento}</p>
   </div>
@@ -299,31 +281,30 @@ const agregarItemCategoria = (array) => {
 };
 
 //Formulario agregar categoria
+
 formAgregarCategoria.onsubmit = (event) => {
   event.preventDefault();
-};
-
-// El botón envía el form, así que podrian desechar la funcion onclick del boton y poner
-// toda esta logica en el submit del form. 
-botonAgregarCategoria.onclick = () => {
   const categoriaCapitalizada = capitalizar(inputAgregarCategoria.value);
   const arrayDesdeLS = traerCategoriasDesdeLS("categorias");
 
   if (arrayDesdeLS.includes(categoriaCapitalizada)) {
-    // Me gusta que hayan agregado validaciones a lo largo de todo su TP :) 
+    // Me gusta que hayan agregado validaciones a lo largo de todo su TP :)
     alert("¡Categoria ya existente!");
   } else if (categoriaCapitalizada === "") {
     alert("¡Categoria sin nombre!");
   } else {
     arrayDesdeLS.push(categoriaCapitalizada);
     guardarCategoriasLocalStorage(arrayDesdeLS, "categorias");
-    agregarCategoriaHTML(traerCategoriasDesdeLS("categorias"), selectCategoria);
-    
-    agregarCategoriaHTML(
+    agregarCategoriaSelectHTML(
+      traerCategoriasDesdeLS("categorias"),
+      selectCategoria
+    );
+
+    agregarCategoriaSelectHTML(
       traerCategoriasDesdeLS("categorias"),
       selectCategoriaNuevaOperacion
     );
-    agregarCategoriaHTML(
+    agregarCategoriaSelectHTML(
       traerCategoriasDesdeLS("categorias"),
       selectCategoriaEditarOperacion
     );
@@ -363,17 +344,15 @@ const mostrarCategoriaAEditar = () => {
         categoriasLS.push(categoriaAEditar);
         guardarCategoriasLocalStorage(categoriasLS, "categorias");
 
-        // Esta estructura se repite varias veces a lo largo de su código: 
-        // podrían ponerla dentro de otra función auxiliar
-        agregarCategoriaHTML(
+        agregarCategoriaSelectHTML(
           traerCategoriasDesdeLS("categorias"),
           selectCategoria
         );
-        agregarCategoriaHTML(
+        agregarCategoriaSelectHTML(
           traerCategoriasDesdeLS("categorias"),
           selectCategoriaNuevaOperacion
         );
-        agregarCategoriaHTML(
+        agregarCategoriaSelectHTML(
           traerCategoriasDesdeLS("categorias"),
           selectCategoriaEditarOperacion
         );
@@ -390,12 +369,15 @@ botonEditarCategoriaFormulario.onclick = () => {
   arrayCategoriasLS.push(inputEditarNombreCategoria.value);
   guardarCategoriasLocalStorage(arrayCategoriasLS, "categorias");
 
-  agregarCategoriaHTML(traerCategoriasDesdeLS("categorias"), selectCategoria);
-  agregarCategoriaHTML(
+  agregarCategoriaSelectHTML(
+    traerCategoriasDesdeLS("categorias"),
+    selectCategoria
+  );
+  agregarCategoriaSelectHTML(
     traerCategoriasDesdeLS("categorias"),
     selectCategoriaNuevaOperacion
   );
-  agregarCategoriaHTML(
+  agregarCategoriaSelectHTML(
     traerCategoriasDesdeLS("categorias"),
     selectCategoriaEditarOperacion
   );
@@ -405,13 +387,11 @@ botonEditarCategoriaFormulario.onclick = () => {
 };
 
 //AGREGAR CATEGORIA EN EL SELECT
-// El nombre de esta función es confuso. Si lo que hace es agregar categorías a los select, 
-// debería llamarse agregarCategoriaASelectHTML o algo así
-const agregarCategoriaHTML = (categorias, select) => {
 
-  // Esta función está algo repetitiva. 
-  // La podríamos hacer más breve haciendo que el valor de la acc sea condicional. 
-  // Así no necesitan el if else. 
+const agregarCategoriaSelectHTML = (categorias, select) => {
+  // Esta función está algo repetitiva.
+  // La podríamos hacer más breve haciendo que el valor de la acc sea condicional.
+  // Así no necesitan el if else.
 
   // let acumuladora = ""
   // if (select === selectCategoria) {
@@ -431,28 +411,20 @@ const agregarCategoriaHTML = (categorias, select) => {
 
   if (select === selectCategoria) {
     const opcionTodos = `<option value="Todos">Todas</option>`;
-    const categoriasEnHTML = categorias.reduce(
-      // No necesitan definir el cuarto parametro aca
-      (acc, categoria, index, array) => {
-        return (
-          acc +
-          `<option value="${categoria}" id="categoria-${index}">${categoria}</option>`
-        );
-      },
-      opcionTodos
-    );
+    const categoriasEnHTML = categorias.reduce((acc, categoria, index) => {
+      return (
+        acc +
+        `<option value="${categoria}" id="categoria-${index}">${categoria}</option>`
+      );
+    }, opcionTodos);
     select.innerHTML = categoriasEnHTML;
   } else {
-    const categoriasEnHTML = categorias.reduce(
-      // Ni acá
-      (acc, categoria, index, array) => {
-        return (
-          acc +
-          `<option value="${categoria}" id="categoria-${index}">${categoria}</option>`
-        );
-      },
-      ""
-    );
+    const categoriasEnHTML = categorias.reduce((acc, categoria, index) => {
+      return (
+        acc +
+        `<option value="${categoria}" id="categoria-${index}">${categoria}</option>`
+      );
+    }, "");
     select.innerHTML = categoriasEnHTML;
   }
 };
@@ -465,8 +437,8 @@ const ejecutarBotonesEliminarCatagoria = () => {
 
   for (let i = 0; i < botonEliminarCategoria.length; i++) {
     botonEliminarCategoria[i].onclick = () => {
-      // ojo, acá declaran una variable sin haberle agregado const o let antes. 
-      // Si hacen eso, JS asume que es una variable de tipo var, que tiene scope global y puede 
+      // ojo, acá declaran una variable sin haberle agregado const o let antes.
+      // Si hacen eso, JS asume que es una variable de tipo var, que tiene scope global y puede
       // traer problemas. Agreguen let antes
       idCortado = botonEliminarCategoria[i].id.slice(25);
       // No dejen console log en el codigo
@@ -483,15 +455,15 @@ const ejecutarBotonesEliminarCatagoria = () => {
       guardarCategoriasLocalStorage(categoriasNoEliminadas, "categorias");
       traerCategoriasDesdeLS("categorias");
       agregarItemCategoria(traerCategoriasDesdeLS("categorias"));
-      agregarCategoriaHTML(
+      agregarCategoriaSelectHTML(
         traerCategoriasDesdeLS("categorias"),
         selectCategoria
       );
-      agregarCategoriaHTML(
+      agregarCategoriaSelectHTML(
         traerCategoriasDesdeLS("categorias"),
         selectCategoriaNuevaOperacion
       );
-      agregarCategoriaHTML(
+      agregarCategoriaSelectHTML(
         traerCategoriasDesdeLS("categorias"),
         selectCategoriaEditarOperacion
       );
@@ -517,8 +489,8 @@ const traerOperacionesDesdeLS = (clave) => {
     return null;
   } else {
     return operacionesDesdeLS.map((operacion, index) => {
-      // Entiendo que aquí le agregan el indice a la operación para poder usarlo en 
-      // mostrarOperacionesEnHTML. Creo que sería más sencillo si en el reduce de mostrarOperacionesEnHTML 
+      // Entiendo que aquí le agregan el indice a la operación para poder usarlo en
+      // mostrarOperacionesEnHTML. Creo que sería más sencillo si en el reduce de mostrarOperacionesEnHTML
       // usan el indice del reduce, en lugar de agregarlo aquí.
       return { ...operacion, index };
     });
@@ -639,13 +611,12 @@ const editarOperacion = () => {
 
       botonFormularioEditarOperaciones.onclick = (event) => {
         event.preventDefault();
-        // No son necesarios ni los paréntesis ni las comas acá.
-        (operacionAEditar.descripcion = inputDescripcionEditarOperacion.value),
-          (operacionAEditar.categoria = selectCategoriaEditarOperacion.value),
-          (operacionAEditar.fecha = inputFechaEditarOperacion.value),
-          (operacionAEditar.monto = inputMontoEditarOperacion.value),
-          (operacionAEditar.tipo = selectTipoEditarOperacion.value),
-          guardarOperacionesLocalStorage(operaciones, "operaciones");
+        operacionAEditar.descripcion = inputDescripcionEditarOperacion.value;
+        operacionAEditar.categoria = selectCategoriaEditarOperacion.value;
+        operacionAEditar.fecha = inputFechaEditarOperacion.value;
+        operacionAEditar.monto = inputMontoEditarOperacion.value;
+        operacionAEditar.tipo = selectTipoEditarOperacion.value;
+        guardarOperacionesLocalStorage(operaciones, "operaciones");
         mostrarOperacionesEnHTML(
           ordenarFechas(traerOperacionesDesdeLS("operaciones"))
         );
@@ -669,13 +640,12 @@ const eliminarOperacion = (index) => {
   operaciones = traerOperacionesDesdeLS("operaciones").filter((elemento, i) => {
     return index !== i;
   });
-  // ಠ_ಠ 
+  // ಠ_ಠ
   console.log(operaciones);
   console.log("eliminar", index);
   guardarOperacionesLocalStorage(operaciones, "operaciones");
   mostrarOperacionesEnHTML(operaciones);
   mostrarEnBalance(traerOperacionesDesdeLS("operaciones"));
-
 };
 
 const asignarFuncionEliminar = () => {
@@ -685,7 +655,7 @@ const asignarFuncionEliminar = () => {
   for (let i = 0; i < botonEliminarOperacion.length; i++) {
     let id = botonEliminarOperacion[i].id.slice(32);
     let idOperacion = Number(id);
-    // ಠ_ಠ 
+    // ಠ_ಠ
     console.log("asignar", idOperacion);
     botonEliminarOperacion[i].onclick = () => {
       eliminarOperacion(idOperacion);
@@ -750,10 +720,9 @@ const mostrarEnBalance = (operaciones) => {
 
   let resultado = sumaGanancias - sumaGastos;
 
-  
   // El código acá está super bien, el problema es que si edito muchas operaciones
-  // me va a pasar que el numero del total se vea rojo aunque esté en positivo. 
-  // El problema es que le quedan agregadas a la vez las clases success y danger: 
+  // me va a pasar que el numero del total se vea rojo aunque esté en positivo.
+  // El problema es que le quedan agregadas a la vez las clases success y danger:
   // tendríamos que aquí, además de agregarle una clase, quitarle la otra
   if (resultado > 0) {
     numeroTotalBalance.classList.add("has-text-success");
@@ -817,9 +786,9 @@ selectCategoria.onchange = () => {
 // 1. Voy a la seccion seccionPrincipal
 // 2. Elijo filtrar por tipo "gasto"
 // 3. Veo los gastos
-// 4. Elijo filtrar por las operaciones a partir del 1ro de noviembre 
+// 4. Elijo filtrar por las operaciones a partir del 1ro de noviembre
 // 5. Veo a la vez gastos y ganancias, a pesar de que el filtro seleccionado es el de "gasto"
-// Todos los filtros se deben aplicar a la vez, eso incluye las fechas. 
+// Todos los filtros se deben aplicar a la vez, eso incluye las fechas.
 // La funcion fechasNuevas deberia ser parte de aplicarFiltros
 // En cambio acá estan filtrando por *todas* las fechas del LS sin fijarse si hay otro filtro seleccionado
 
@@ -869,9 +838,7 @@ const ordenarPor = () => {
                                            REPORTES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-
-// Impecable la seccion reportes 
-
+// Impecable la seccion reportes
 
 //Funcion Categoria con Mayor ganancia o gasto
 const mostrarMayorGananciaOGasto = (tipo) => {
@@ -1118,17 +1085,20 @@ if (
 
 if (traerCategoriasDesdeLS("categorias") === null) {
   guardarCategoriasLocalStorage(categorias, "categorias");
-  agregarCategoriaHTML(categorias, selectCategoria);
-  agregarCategoriaHTML(categorias, selectCategoriaNuevaOperacion);
-  agregarCategoriaHTML(categorias, selectCategoriaEditarOperacion);
+  agregarCategoriaSelectHTML(categorias, selectCategoria);
+  agregarCategoriaSelectHTML(categorias, selectCategoriaNuevaOperacion);
+  agregarCategoriaSelectHTML(categorias, selectCategoriaEditarOperacion);
   agregarItemCategoria(categorias);
 } else {
-  agregarCategoriaHTML(traerCategoriasDesdeLS("categorias"), selectCategoria);
-  agregarCategoriaHTML(
+  agregarCategoriaSelectHTML(
+    traerCategoriasDesdeLS("categorias"),
+    selectCategoria
+  );
+  agregarCategoriaSelectHTML(
     traerCategoriasDesdeLS("categorias"),
     selectCategoriaNuevaOperacion
   );
-  agregarCategoriaHTML(
+  agregarCategoriaSelectHTML(
     traerCategoriasDesdeLS("categorias"),
     selectCategoriaEditarOperacion
   );
