@@ -437,21 +437,13 @@ const ejecutarBotonesEliminarCatagoria = () => {
 
   for (let i = 0; i < botonEliminarCategoria.length; i++) {
     botonEliminarCategoria[i].onclick = () => {
-      // ojo, acá declaran una variable sin haberle agregado const o let antes.
-      // Si hacen eso, JS asume que es una variable de tipo var, que tiene scope global y puede
-      // traer problemas. Agreguen let antes
-      idCortado = botonEliminarCategoria[i].id.slice(25);
-      // No dejen console log en el codigo
-      console.log(idCortado);
-      // Mismo problema acá
-      idDelBoton = Number(idCortado);
+      let idCortado = botonEliminarCategoria[i].id.slice(25);
+      let idDelBoton = Number(idCortado);
       const categoriasNoEliminadas = traerCategoriasDesdeLS(
         "categorias"
       ).filter((elemento, index) => {
         return index !== idDelBoton;
       });
-      // no dejen console log
-      console.log(categoriasNoEliminadas);
       guardarCategoriasLocalStorage(categoriasNoEliminadas, "categorias");
       traerCategoriasDesdeLS("categorias");
       agregarItemCategoria(traerCategoriasDesdeLS("categorias"));
@@ -558,8 +550,7 @@ seccionNuevaOperacion.onsubmit = (event) => {
   event.preventDefault();
 };
 botonAgregarNuevaOperacion.onclick = () => {
-  // este valor no cambia, así que debería ser const
-  let operacion = {
+  const operacion = {
     descripcion: inputDescripcionNuevaOperacion.value,
     categoria: selectCategoriaNuevaOperacion.value,
     fecha: inputFechaNuevaOperacion.value,
@@ -640,9 +631,6 @@ const eliminarOperacion = (index) => {
   operaciones = traerOperacionesDesdeLS("operaciones").filter((elemento, i) => {
     return index !== i;
   });
-  // ಠ_ಠ
-  console.log(operaciones);
-  console.log("eliminar", index);
   guardarOperacionesLocalStorage(operaciones, "operaciones");
   mostrarOperacionesEnHTML(operaciones);
   mostrarEnBalance(traerOperacionesDesdeLS("operaciones"));
@@ -655,8 +643,6 @@ const asignarFuncionEliminar = () => {
   for (let i = 0; i < botonEliminarOperacion.length; i++) {
     let id = botonEliminarOperacion[i].id.slice(32);
     let idOperacion = Number(id);
-    // ಠ_ಠ
-    console.log("asignar", idOperacion);
     botonEliminarOperacion[i].onclick = () => {
       eliminarOperacion(idOperacion);
     };
@@ -720,17 +706,15 @@ const mostrarEnBalance = (operaciones) => {
 
   let resultado = sumaGanancias - sumaGastos;
 
-  // El código acá está super bien, el problema es que si edito muchas operaciones
-  // me va a pasar que el numero del total se vea rojo aunque esté en positivo.
-  // El problema es que le quedan agregadas a la vez las clases success y danger:
-  // tendríamos que aquí, además de agregarle una clase, quitarle la otra
   if (resultado > 0) {
     numeroTotalBalance.classList.add("has-text-success");
+    numeroTotalBalance.classList.remove("has-text-danger");
     numeroTotalBalance.textContent = `+$${resultado}`;
   } else {
     let resultadoString = String(resultado);
     let stringCortado = resultadoString.slice(1);
     numeroTotalBalance.classList.add("has-text-danger");
+    numeroTotalBalance.classList.remove("has-text-success");
     numeroTotalBalance.textContent = `-$${Number(stringCortado)}`;
   }
 };
@@ -782,18 +766,8 @@ selectCategoria.onchange = () => {
 
 //POR FECHA
 
-// Las fechas no forman parte de la funcion aplicarFiltros, por lo que ocurre esta situacion:
-// 1. Voy a la seccion seccionPrincipal
-// 2. Elijo filtrar por tipo "gasto"
-// 3. Veo los gastos
-// 4. Elijo filtrar por las operaciones a partir del 1ro de noviembre
-// 5. Veo a la vez gastos y ganancias, a pesar de que el filtro seleccionado es el de "gasto"
-// Todos los filtros se deben aplicar a la vez, eso incluye las fechas.
-// La funcion fechasNuevas deberia ser parte de aplicarFiltros
-// En cambio acá estan filtrando por *todas* las fechas del LS sin fijarse si hay otro filtro seleccionado
-
 inputFecha.onchange = () => {
-  const filtradoDeFechas = fechasNuevas(traerOperacionesDesdeLS("operaciones"));
+  const filtradoDeFechas = fechasNuevas(aplicarFiltros());
   mostrarOperacionesEnHTML(ordenarFechas(filtradoDeFechas));
 };
 
